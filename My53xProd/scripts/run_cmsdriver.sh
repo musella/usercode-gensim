@@ -1,5 +1,15 @@
 #!/bin/bash
 
+mkMultiCrab() {
+    dsetName=$1 && shift
+    version=$1 && shift
+cat >> multicrab.cfg <<EOF
+[$dsetName-v${version}]
+CMSSW.pset=${dsetName}.py
+USER.publish_data_name=${dsetName}-v${version}
+EOF
+}
+
 makePset() {
     mass=$1
     cmsDriver.py MyGenSim/My53xProd/python/PythiaHadronizer_HToGG_cff \
@@ -17,11 +27,32 @@ makePset() {
 	-n 2
 }
 
-##     --dump_python \
+makePsetRD() {
+    mass=$1
+    gt=START53_V7L
+    outname=GluGluToH2JetsHToGG_M-${mass}_8TeV-powheg-minlo-pythia6-${gt}_PhRdPu
+    cmsDriver.py MyGenSim/My53xProd/python/PythiaHadronizer_HToGG_cff \
+	--filein MyGenSim/My53xProd/data/MINLO_H${mass}.txt \
+	--filetype LHE \
+	--conditions ${gt}::All \
+	-s GEN,SIM,DIGI,L1,DIGI2RAW,RAW2DIGI,L1Reco,RECO \
+	--eventcontent AODSIM --datatier AODSIM \
+	--fileout ${outname}.root\
+	--pileup fromDB \
+	--pileup_input dbs:/MinBias_TuneZ2star_8TeV-pythia6/Summer12-START50_V13-v3/GEN-SIM \
+	--no_exec \
+	--customise MyGenSim/My53xProd/customize_sources \
+	--python_filename ${outname}.py \
+	--runsScenarioForMC Run2012_AB_C_D_oneRunPerEra \
+	-n 2
+    
+    mkMultiCrab $outname 1
+}
 
+##     --dump_python
 
 ## for mass in $(seq 110 150 5); do
 ##     makePset $mass
 ## done
 
-makePset 125
+makePsetRD 125
