@@ -1,5 +1,7 @@
 #!/bin/bash
 
+export PYTHONPATH=${PWD}:${PYTHONPATH}
+
 mkMultiCrab() {
     dsetName=$1 && shift
     version=$1 && shift
@@ -22,7 +24,7 @@ makePset() {
 	--pileup 2012_Summer_50ns_PoissonOOTPU \
 	--pileup_input MyGenSim/My53xProd/data/minbias.txt \
 	--no_exec \
-	--customise MyGenSim/My53xProd/customize_sources \
+	--customise customize_sources.py \
 	--python_filename GluGluToH2JetsHToGG_M-${mass}_8TeV-powheg-minlo-pythia6.py \
 	-n 2
 }
@@ -41,7 +43,7 @@ makePsetRD() {
 	--pileup fromDB \
 	--pileup_input dbs:/MinBias_TuneZ2star_8TeV-pythia6/Summer12-START50_V13-v3/GEN-SIM \
 	--no_exec \
-	--customise MyGenSim/My53xProd/customize_sources \
+	--customise customize_sources.py \
 	--python_filename ${outname}.py \
 	--runsScenarioForMC Run2012_AB_C_D_oneRunPerEra \
 	-n 2
@@ -50,6 +52,8 @@ makePsetRD() {
 }
 
 ##     --dump_python
+
+rm multicrab.cfg
 
 ## for mass in $(seq 110 150 5); do
 ##     makePset $mass
