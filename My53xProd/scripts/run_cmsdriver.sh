@@ -30,30 +30,38 @@ makePset() {
 }
 
 
-makePsetPostLS1() {
-    mass=$1
-    gt=POSTLS161_V12
-    outname=GluGluToHHToBBGG_M-${mass}_14TeV-PostLS1-madgraph-pythia6
+makePsetHH() {
+    mass=125
+    cme=$1
+    if [[ $cme == 14 ]]; then
+	gt=POSTLS161_V12
+	pu=AVE_50_BX_50ns
+	mb=dbs:/MinBias_TuneZ2star_${cme}TeV-pythia6/Summer12-UpgradeL1TDR-POSTLS161_V1-v1/GEN-SIM
+    else
+	gt=START53_V7C
+	pu=2012_Summer_50ns_PoissonOOTPU
+	mb=dbs:/MinBias_TuneZ2star_${cme}TeV-pythia6/Summer12-START50_V13-v3/GEN-SIM
+    fi
+    outname=GluGluToHHToBBGG_M-${mass}_${cme}TeV-${gt}-madgraph-pythia6
     cmsDriver.py MyGenSim/My53xProd/python/PythiaHadronizer_HHToBBGG_cff \
-	--filein MyGenSim/My53xProd/data/Madgraph_HH.txt \
+	--filein MyGenSim/My53xProd/data/Madgraph_HH_${cme}TeV.txt \
 	--filetype LHE \
  	-s GEN,SIM,DIGI,L1,DIGI2RAW,RAW2DIGI,L1Reco,RECO \
 	--conditions ${gt}::All \
 	--eventcontent AODSIM --datatier AODSIM \
 	--fileout ${outname}.root \
-	--pileup AVE_50_BX_50ns \
-	--pileup_input dbs:/MinBias_TuneZ2star_14TeV-pythia6/Summer12-UpgradeL1TDR-POSTLS161_V1-v1/GEN-SIM \
+	--pileup ${pu} \
+	--pileup_input ${mb} \
 	--no_exec \
 	--customise customize_sources.py \
 	--python_filename ${outname}.py \
 	-n 2
 
-#	-s GEN \
-
-
     mkMultiCrab $outname 1
    
 }
+
+
 
 makePsetRD() {
     mass=$1
@@ -87,4 +95,5 @@ rm multicrab.cfg
 
 ## makePset 125
 ## makePsetRD 125
-makePsetPostLS1 125
+## makePsetHH 14
+makePsetHH 8

@@ -1,0 +1,1 @@
+root://eoscms.cern.ch//eos/cms/store/cmst3/user/musella/hh_bbgg/lhe/madgraph_8TeV/dec-events.lhe
