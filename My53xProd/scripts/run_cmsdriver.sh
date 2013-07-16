@@ -29,6 +29,32 @@ makePset() {
 	-n 2
 }
 
+
+makePsetPostLS1() {
+    mass=$1
+    gt=POSTLS161_V12
+    outname=GluGluToHHToBBGG_M-${mass}_14TeV-PostLS1-madgraph-pythia6
+    cmsDriver.py MyGenSim/My53xProd/python/PythiaHadronizer_HHToBBGG_cff \
+	--filein MyGenSim/My53xProd/data/Madgraph_HH.txt \
+	--filetype LHE \
+ 	-s GEN,SIM,DIGI,L1,DIGI2RAW,RAW2DIGI,L1Reco,RECO \
+	--conditions ${gt}::All \
+	--eventcontent AODSIM --datatier AODSIM \
+	--fileout ${outname}.root \
+	--pileup AVE_50_BX_50ns \
+	--pileup_input dbs:/MinBias_TuneZ2star_14TeV-pythia6/Summer12-UpgradeL1TDR-POSTLS161_V1-v1/GEN-SIM \
+	--no_exec \
+	--customise customize_sources.py \
+	--python_filename ${outname}.py \
+	-n 2
+
+#	-s GEN \
+
+
+    mkMultiCrab $outname 1
+   
+}
+
 makePsetRD() {
     mass=$1
     gt=START53_V7L
@@ -59,4 +85,6 @@ rm multicrab.cfg
 ##     makePset $mass
 ## done
 
-makePsetRD 125
+## makePset 125
+## makePsetRD 125
+makePsetPostLS1 125
