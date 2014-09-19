@@ -36,7 +36,8 @@ makePsetHH() {
     if [[ $cme == 14 ]]; then
 	gt=POSTLS161_V12
 	pu=AVE_50_BX_50ns
-	mb=dbs:/MinBias_TuneZ2star_${cme}TeV-pythia6/Summer12-UpgradeL1TDR-POSTLS161_V1-v1/GEN-SIM
+	## mb=dbs:/MinBias_TuneZ2star_${cme}TeV-pythia6/Summer12-UpgradeL1TDR-POSTLS161_V1-v1/GEN-SIM
+	mb=dbs:/RelValMinBias_UPGpostls1_14/CMSSW_6_0_1_PostLS1v2_patch3-POSTLS161_V12-v1/GEN-SIM-RECO
     else
 	gt=START53_V7C
 	pu=2012_Summer_50ns_PoissonOOTPU
@@ -95,5 +96,5 @@ rm multicrab.cfg
 
 ## makePset 125
 ## makePsetRD 125
-## makePsetHH 14
-makePsetHH 8
+makePsetHH 14
+## makePsetHH 8
